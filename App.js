@@ -3,21 +3,29 @@ import { Button, Text, View } from 'react-native';
 import { useState } from 'react';
 
 export default function App() {
-  const [data, setData] = useState(null);
+  const [playerChoice, setPlayerChoice] = useState(null);
+  const [computerChoice, setComputerChoice] = useState(null);
+
+  const makeMoves = (choice) => {
+    setComputerChoice("Rock");
+    setPlayerChoice(choice);
+  }
+
+
 
   return (
     <View>
-      {data == null ? (
+      {playerChoice == null ? (
         <View>
           <Text>Rock / Paper / Scissors</Text>
-          <Button title="Rock" onPress={() => setData("Rock")} />
-          <Button title="Paper" onPress={() => setData("Paper")} />
-          <Button title="Scissors" onPress={() => setData("Scissors")} />
+          <Button title="Rock" onPress={() => makeMoves("Rock")} />
+          <Button title="Paper" onPress={() => makeMoves("Paper")} />
+          <Button title="Scissors" onPress={() => makeMoves("Scissors")} />
         </View>
       ) : (
         <View>
-          <Text>You picked {data}.</Text>
-          <Button title="Reset" onPress={() => setData(null)} />
+          <Text>You picked {playerChoice}. Computer picked {computerChoice}</Text>
+          <Button title="Reset" onPress={() => setPlayerChoice(null)} />
         </View>
       )}
     </View>
