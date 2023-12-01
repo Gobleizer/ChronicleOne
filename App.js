@@ -8,31 +8,56 @@ function getRandomArrayElement(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
+const determineWinner = (playerChoice, computerChoice) => {
+  //rock beats scissors
+  //scissors beats paper
+  //paper beats rock
+  let result = "Computer";
+  if (playerChoice === computerChoice) {
+    result = "Draw"
+  }
+  if (playerChoice === "Rock" && computerChoice === "Scissors") {
+    result = "Player";
+  }
+  if (playerChoice === "Paper" && computerChoice === "Rock") {
+    result = "Player";
+  }
+  if (playerChoice === "Scissors" && computerChoice === "Paper") {
+    result = "Player";
+  }
+  return result;
+}
+
 export default function App() {
   const [playerChoice, setPlayerChoice] = useState(null);
   const [computerChoice, setComputerChoice] = useState(null);
+  const [record, setRecord] = useState({wins: 0, losses: 0, draws: 0});
   
 
   const makeMoves = (choice) => {
-    setComputerChoice(getRandomArrayElement(options));
+    const computerChoiceMove = getRandomArrayElement(options);
+    setComputerChoice(computerChoiceMove);
     setPlayerChoice(choice);
+    updateRecord(determineWinner(choice, computerChoiceMove));
   }
 
-  const isPlayerWinner = () => {
-    //rock beats scissors
-    //scissors beats paper
-    //paper beats rock
-    let result = false;
-    if (playerChoice == "Rock" && computerChoice == "Scissors") {
-      result = true;
+  
+
+  const updateRecord = (result) => {
+    let update = {};
+    if (result === "Player") {
+      update.wins = record.wins + 1;
     }
-    if (playerChoice == "Paper" && computerChoice == "Rock") {
-      result = true;
+    if (result === "Computer") {
+      update.loses = record.losses + 1;
     }
-    if (playerChoice == "Scissors" && computerChoice == "Paper") {
-      result = true;
+    if (result === "Draw") {
+      update.draws = record.draws + 1;
     }
-    return result;
+    setRecord(record => ({
+      ...record,
+      ...update
+    }))
   }
 
 
@@ -48,6 +73,7 @@ export default function App() {
       ) : (
         <View>
           <Text>You picked {playerChoice}. Computer picked {computerChoice}</Text>
+          <Text>Wins {record.wins} Losses {record.losses} Draws {record.draws}</Text>
           <Button title="Reset" onPress={() => setPlayerChoice(null)} />
         </View>
       )}
